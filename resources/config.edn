@@ -1,0 +1,22 @@
+{
+ :tunnels [
+           {
+            :name "btl-tun-dev"
+            :encryption-key "XXXXXXXX"
+            :template-path "resources/configs/etc/sysconfig/network-scripts/ifcfg-ipsec-ci-dev"
+            :authentication-key "YYYYYYYYYYYY"
+            :lan-A {:source-gateway "54.85.220.190"
+                    :destination-gateway "119.9.21.1"
+                    :source-network "172.31.32.0/20"
+                    :destination-network "192.168.3.0/24"
+                    :destination-ip "119.9.21.247"
+                    :provider "aws" }
+            :lan-B {:source-gateway "119.9.21.1"
+                    :destination-gateway "54.85.220.1"
+                    :source-network "192.168.3.0/24"
+                    :destination-network "172.31.32.0/20"
+                    :destination-ip "54.85.220.190"
+                    :provider "rs"}
+            }
+           ]
+ }

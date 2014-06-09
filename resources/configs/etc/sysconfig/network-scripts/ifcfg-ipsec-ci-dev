@@ -1,0 +1,8 @@
+TYPE=IPSEC
+ONBOOT=yes
+IKE_METHOD=PSK
+SRCGW={{source-gateway}}
+DSTGW={{destination-gateway}}
+SRCNET={{source-network}}
+DSTNET={{destination-network}}
+DST={{destination-ip}}
