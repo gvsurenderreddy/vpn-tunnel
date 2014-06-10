@@ -4,4 +4,12 @@
             [vpn-tunnel.config :refer [read-config]])
   (:gen-class))
 
-(defn -main [&args] (lift (create-vpn-tunnel-group-spec (read-config))))
+;; TODO: split up the creation of the boxes from the applying the ipsec configs
+(defn -main
+  [&args]
+  (let [specs (create-vpn-tunnel-group-spec (read-config))
+        left-group-spec (:right specs)
+        right-group-spec (:left specs)
+        left (future  (converge {group 1} left-group-spec))
+        right (future)] (converge {group 1} left-group-spec))
+  [@left, @right])
