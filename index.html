@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Vpn-tunnel by mateoconfeugo</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Vpn-tunnel</h1>
+        <p>create a vpn tunnel between two networks two using two ipsec enabled linux systems</p>
+
+        <p class="view"><a href="https://github.com/mateoconfeugo/vpn-tunnel">View the Project on GitHub <small>mateoconfeugo/vpn-tunnel</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/mateoconfeugo/vpn-tunnel/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/mateoconfeugo/vpn-tunnel/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/mateoconfeugo/vpn-tunnel">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <p>Connect two linux networks together via vpn.  Handy for connecting clouds together or colo and clouds or whatever ...</p>
+
+<div class="highlight highlight-source-clojure"><pre>
+(<span class="pl-k">def</span> <span class="pl-e">tunnel</span> (<span class="pl-en">nth</span> (<span class="pl-c1">:tunnels</span> (<span class="pl-en">read-config</span>)) <span class="pl-c1">0</span>) )
+(<span class="pl-k">def</span> <span class="pl-e">grp-name</span> (<span class="pl-c1">:name</span> tunnel))
+(<span class="pl-k">def</span> <span class="pl-e">tmpl</span> (<span class="pl-en">slurp</span> (<span class="pl-c1">:template-path</span> tunnel)) )
+(<span class="pl-k">def</span> <span class="pl-e">left-spec</span> (<span class="pl-en">create-ipsec-spec</span> {<span class="pl-c1">:ipsec-cfgs</span> (<span class="pl-c1">:lan-A</span> tunnel) <span class="pl-c1">:template</span> tmpl}))
+(<span class="pl-k">def</span> <span class="pl-e">right-spec</span> (<span class="pl-en">create-ipsec-spec</span> {<span class="pl-c1">:ipsec-cfgs</span> (<span class="pl-c1">:lan-B</span> tunnel) <span class="pl-c1">:template</span> tmpl}))
+(<span class="pl-k">def</span> <span class="pl-e">base-server</span> (<span class="pl-en">server-spec</span> <span class="pl-c1">:phases</span> {<span class="pl-c1">:bootstrap</span> (<span class="pl-en">plan-fn</span> (<span class="pl-en">automated-admin-user</span>))}))
+(<span class="pl-k">def</span> <span class="pl-e">left-group</span> (<span class="pl-en">group-spec</span> grp-name <span class="pl-c1">:extends</span> [base-server left-spec]))
+(<span class="pl-k">def</span> <span class="pl-e">right-group</span> (<span class="pl-en">group-spec</span> grp-name <span class="pl-c1">:extends</span> [base-server right-spec]))
+(<span class="pl-k">def</span> <span class="pl-e">aws</span> (<span class="pl-en">pallet.configure/compute-service</span>  <span class="pl-c1">:aws</span>))
+(<span class="pl-k">def</span> <span class="pl-e">left</span> (<span class="pl-en">pallet.api/converge</span> {left-group <span class="pl-c1">1</span>} <span class="pl-c1">:compute</span> aws))
+(<span class="pl-k">def</span> <span class="pl-e">rs</span> (<span class="pl-en">pallet.configure/compute-service</span> <span class="pl-c1">:rs</span>))
+(<span class="pl-k">def</span> <span class="pl-e">right</span> (<span class="pl-en">pallet.api/converge</span> {right-group <span class="pl-c1">1</span>} <span class="pl-c1">:compute</span> rs))
+(<span class="pl-k">def</span> <span class="pl-e">test-spec</span> (<span class="pl-en">create-vpn-tunnel-group-spec</span> (<span class="pl-en">read-config</span>)))
+
+
+(<span class="pl-k">def</span> <span class="pl-e">result</span>  (<span class="pl-en">lift</span> (<span class="pl-c1">:left</span> test-spec)))</pre></div>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/mateoconfeugo">mateoconfeugo</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
